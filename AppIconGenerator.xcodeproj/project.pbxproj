@@ -15,8 +15,6 @@
 		53FBCCC02A6376E800B88539 /* AppIconGeneratorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FBCCBF2A6376E800B88539 /* AppIconGeneratorUITests.swift */; };
 		53FBCCC22A6376E800B88539 /* AppIconGeneratorUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FBCCC12A6376E800B88539 /* AppIconGeneratorUITestsLaunchTests.swift */; };
 		53FBCCCF2A64709D00B88539 /* Interface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53FBCCCE2A64709D00B88539 /* Interface.swift */; };
-		53FBCCD32A64ECA900B88539 /* two.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FBCCD12A64ECA900B88539 /* two.png */; };
-		53FBCCD42A64ECA900B88539 /* one.png in Resources */ = {isa = PBXBuildFile; fileRef = 53FBCCD22A64ECA900B88539 /* one.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,8 +47,6 @@
 		53FBCCBF2A6376E800B88539 /* AppIconGeneratorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconGeneratorUITests.swift; sourceTree = "<group>"; };
 		53FBCCC12A6376E800B88539 /* AppIconGeneratorUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconGeneratorUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		53FBCCCE2A64709D00B88539 /* Interface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interface.swift; sourceTree = "<group>"; };
-		53FBCCD12A64ECA900B88539 /* two.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = two.png; path = ../../../../../Desktop/two.png; sourceTree = "<group>"; };
-		53FBCCD22A64ECA900B88539 /* one.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = one.png; path = ../../../../../Desktop/one.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +77,6 @@
 		53FBCC972A6376E700B88539 = {
 			isa = PBXGroup;
 			children = (
-				53FBCCD02A64EC7400B88539 /* Screenshots */,
 				53FBCCA22A6376E700B88539 /* AppIconGenerator */,
 				53FBCCB42A6376E800B88539 /* AppIconGeneratorTests */,
 				53FBCCBE2A6376E800B88539 /* AppIconGeneratorUITests */,
@@ -135,15 +130,6 @@
 				53FBCCC12A6376E800B88539 /* AppIconGeneratorUITestsLaunchTests.swift */,
 			);
 			path = AppIconGeneratorUITests;
-			sourceTree = "<group>";
-		};
-		53FBCCD02A64EC7400B88539 /* Screenshots */ = {
-			isa = PBXGroup;
-			children = (
-				53FBCCD22A64ECA900B88539 /* one.png */,
-				53FBCCD12A64ECA900B88539 /* two.png */,
-			);
-			path = Screenshots;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -250,8 +236,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53FBCCD42A64ECA900B88539 /* one.png in Resources */,
-				53FBCCD32A64ECA900B88539 /* two.png in Resources */,
 				53FBCCAB2A6376E800B88539 /* Preview Assets.xcassets in Resources */,
 				53FBCCA82A6376E800B88539 /* Assets.xcassets in Resources */,
 			);
