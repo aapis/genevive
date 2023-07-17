@@ -129,7 +129,7 @@ struct AppIconGeneratorApp: App {
                                 }
                             }
 
-                            LayerNavigator(layers: $layers)
+//                            LayerNavigator(layers: $layers)
                         }
                     }
                 }
@@ -140,15 +140,21 @@ struct AppIconGeneratorApp: App {
                 Button("Save") {
                     let screenshot = preview.snapshot()
                     let timestamp = Date.now.timeIntervalSince1970
-                    let exportFolder = "/AIG-Export-\(timestamp)/"
+                    let exportFolder = "/Genevive/export-\(timestamp)/"
                     let picturesDir = FileManager.default.urls(for: .picturesDirectory, in: .userDomainMask).first!
                     let imageURL = picturesDir
                         .appending(component: exportFolder)
 
                     do {
+                        try FileManager.default.createDirectory(atPath: picturesDir.path + "/Genevive", withIntermediateDirectories: false)
+                    } catch {
+                        print("Unable to create app export folder")
+                    }
+
+                    do {
                         try FileManager.default.createDirectory(atPath: picturesDir.path + exportFolder, withIntermediateDirectories: false)
                     } catch {
-                        print("Couldn't create folder")
+                        print("Unable to create export folder within app folder")
                     }
 
                     saveAtSize(screenshot: screenshot!, h: 1024, w: 1024, path: imageURL)
