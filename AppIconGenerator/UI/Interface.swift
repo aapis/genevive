@@ -97,7 +97,6 @@ struct Interface: View {
                                 Color.random(),
                                 Color.random()
                             ]
-                            numberOfLayers += 1
                         }
                     } label: {
                         Image(systemName: "arrow.clockwise.circle.fill")

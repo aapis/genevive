@@ -77,55 +77,59 @@ struct AppIconGeneratorApp: App {
                     if uiVisible {
                         interface
                     } else {
-                        HStack(spacing: 1) {
-                            Spacer()
-                            Button {
-                                withAnimation {
-                                    uiVisible.toggle()
+                        VStack {
+                            HStack(spacing: 1) {
+                                Spacer()
+                                Button {
+                                    withAnimation {
+                                        uiVisible.toggle()
+                                    }
+                                } label: {
+                                    ZStack {
+                                        Color.accentColor
+                                        Image(systemName: "arrow.down.backward.square")
+                                            .font(.largeTitle)
+                                            .symbolRenderingMode(.hierarchical)
+                                    }
+                                    .frame(width: 50, height: 50)
                                 }
-                            } label: {
-                                ZStack {
-                                    Color.accentColor
-                                    Image(systemName: "arrow.down.backward.square")
-                                        .font(.largeTitle)
-                                        .symbolRenderingMode(.hierarchical)
+                                .buttonStyle(.plain)
+                                .onHover { inside in
+                                    if inside {
+                                        NSCursor.pointingHand.push()
+                                    } else {
+                                        NSCursor.pop()
+                                    }
                                 }
-                                .frame(width: 50, height: 50)
-                            }
-                            .buttonStyle(.plain)
-                            .onHover { inside in
-                                if inside {
-                                    NSCursor.pointingHand.push()
-                                } else {
-                                    NSCursor.pop()
+
+                                Button {
+                                    withAnimation {
+                                        colours = [
+                                            Color.random(),
+                                            Color.random(),
+                                            Color.random()
+                                        ]
+                                    }
+                                } label: {
+                                    ZStack {
+                                        Color.accentColor
+                                        Image(systemName: "arrow.clockwise.circle.fill")
+                                            .font(.largeTitle)
+                                            .symbolRenderingMode(.hierarchical)
+                                    }
+                                    .frame(width: 50, height: 50)
+                                }
+                                .buttonStyle(.plain)
+                                .onHover { inside in
+                                    if inside {
+                                        NSCursor.pointingHand.push()
+                                    } else {
+                                        NSCursor.pop()
+                                    }
                                 }
                             }
 
-                            Button {
-                                withAnimation {
-                                    colours = [
-                                        Color.random(),
-                                        Color.random(),
-                                        Color.random()
-                                    ]
-                                }
-                            } label: {
-                                ZStack {
-                                    Color.accentColor
-                                    Image(systemName: "arrow.clockwise.circle.fill")
-                                        .font(.largeTitle)
-                                        .symbolRenderingMode(.hierarchical)
-                                }
-                                .frame(width: 50, height: 50)
-                            }
-                            .buttonStyle(.plain)
-                            .onHover { inside in
-                                if inside {
-                                    NSCursor.pointingHand.push()
-                                } else {
-                                    NSCursor.pop()
-                                }
-                            }
+                            LayerNavigator(layers: $layers)
                         }
                     }
                 }
