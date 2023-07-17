@@ -1,7 +1,7 @@
 # Genevive
 ### The AI-free app icon generator
 
-Create random app icons by dragging sliders, then save them at the following resolutions. 
+Create random app icons by dragging sliders, then save them at the following resolutions.
 
 * 16x16
 * 32x32
@@ -9,4 +9,7 @@ Create random app icons by dragging sliders, then save them at the following res
 * 128x128
 * 256x256
 * 512x512
-* 16x16
+* 1024x1024
+
+<img src="Screenshots/one.png" width="400" />
+<img src="Screenshots/two.png" width="400" />
