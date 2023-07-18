@@ -64,9 +64,6 @@ struct ContentView: View {
             } else if imageType == .wallpaper {
                 content
                     .frame(width: screenW, height: screenH)
-                    .onAppear(perform: {
-                        print("Wallpaper appeared \(screenW) \(screenH)")
-                    })
             }
 
         }
@@ -81,20 +78,21 @@ struct ContentView: View {
     }
 
     private func updateLayers() -> Void {
+        // reset each time does destroy the current state but avoids the problem of too many layers
+        gradientLayers = []
+
         for _ in 0...Int(numberOfLayers) {
             var layer: any IconLayer = shapeFillType == 0 ? GradientLayer(colours: colours, screenH: screenH, screenW: screenW) : SolidLayer(colours: colours, screenH: screenH, screenW: screenW)
             layer.randomize()
 
-            if gradientLayers.count <= 300 {
-                gradientLayers.append(layer)
-            }
+            gradientLayers.append(layer)
         }
     }
 
     private func modifyLayers() -> Void {
-        print(gradientLayers.count) // TODO: lol I'm making way too many layers apparently! 12 on slider is 98 layers!
+
         for i in 0...Int(numberOfLayers) {
-//            gradientLayers[i].randomize() // TODO: index out of range!?
+            gradientLayers[i].randomize()
         }
     }
 }

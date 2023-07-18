@@ -23,12 +23,14 @@ public struct GradientLayer: IconLayer {
 
     private var screenH: CGFloat = 1000
     private var screenW: CGFloat = 1000
+    private var colours: [Color] = []
 
 //    @State public var enabled: Bool = true
 
     public init(colours: [Color], screenH: CGFloat, screenW: CGFloat) {
         self.startPoint = .top
         self.endPoint = .bottom
+        self.colours = colours
         self.fill = LinearGradient(gradient: Gradient(colors: colours), startPoint: self.startPoint, endPoint: self.endPoint)
         self.index += 1
 //        self.toggleUi = AnyView(Toggle("Layer \(id)", isOn: $enabled))
@@ -41,6 +43,18 @@ public struct GradientLayer: IconLayer {
 
         startPoint = points.randomElement()!
         endPoint = points.randomElement()!
+
+        // TODO: This works, but needs to be an option since the colours for each layer are completely random
+        // TODO: will need to make all the colours based on the same random set instead of a random set for each
+        // TODO: individual layer
+//        colours = [
+//            Color.random(),
+//            Color.random(),
+//            Color.random()
+//        ]
+//
+//        fill = LinearGradient(gradient: Gradient(colors: colours), startPoint: startPoint, endPoint: endPoint)
+        // TODO: end
 
         rotation = Double.random(in: 1...360)
         positionX = CGFloat.random(in: 1...screenW)
