@@ -13,7 +13,7 @@ public struct GradientLayer: IconLayer {
     public var startPoint: UnitPoint
     public var endPoint: UnitPoint
     public var fill: LinearGradient
-    public var rotation: Double = Double.random(in: 1...1000)
+    public var rotation: Double = Double.random(in: 1...360)
     public var positionX: CGFloat = CGFloat.random(in: 1...1000)
     public var positionY: CGFloat = CGFloat.random(in: 1...1000)
     public var opacity: CGFloat = CGFloat.random(in: 0.1...1)
@@ -21,14 +21,19 @@ public struct GradientLayer: IconLayer {
     public var toggleUi: AnyView?
     public var visible: Bool = true
 
-    @State public var enabled: Bool = true
+    private var screenH: CGFloat = 1000
+    private var screenW: CGFloat = 1000
 
-    public init(colours: [Color]) {
+//    @State public var enabled: Bool = true
+
+    public init(colours: [Color], screenH: CGFloat, screenW: CGFloat) {
         self.startPoint = .top
         self.endPoint = .bottom
         self.fill = LinearGradient(gradient: Gradient(colors: colours), startPoint: self.startPoint, endPoint: self.endPoint)
         self.index += 1
-        self.toggleUi = AnyView(Toggle("Layer \(id)", isOn: $enabled))
+//        self.toggleUi = AnyView(Toggle("Layer \(id)", isOn: $enabled))
+        self.screenH = screenH
+        self.screenW = screenW
     }
 
     mutating public func randomize() -> Void {
@@ -37,9 +42,9 @@ public struct GradientLayer: IconLayer {
         startPoint = points.randomElement()!
         endPoint = points.randomElement()!
 
-        rotation = Double.random(in: 1...1000)
-        positionX = CGFloat.random(in: 1...1000)
-        positionY = CGFloat.random(in: 1...1000)
+        rotation = Double.random(in: 1...360)
+        positionX = CGFloat.random(in: 1...screenW)
+        positionY = CGFloat.random(in: 1...screenH)
         opacity = CGFloat.random(in: 0.1...1)
 
         let shapes: [any View] = [Circle(), Rectangle(), Ellipse(), Capsule()]

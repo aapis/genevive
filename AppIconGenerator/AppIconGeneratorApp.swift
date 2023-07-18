@@ -12,6 +12,10 @@ public enum ShapeFillType {
     case gradient, solid
 }
 
+public enum GeneratedImageType {
+    case icon, wallpaper
+}
+
 @main
 struct AppIconGeneratorApp: App {
     @State public var colours: [Color] = [
@@ -29,6 +33,9 @@ struct AppIconGeneratorApp: App {
     @State public var shapeFillType: Int = 0
     @State public var uiVisible: Bool = true
     @State public var sfsAppIcon: String = ""
+    @State public var imageType: GeneratedImageType = .icon
+    @State private var screenH: CGFloat = 0
+    @State private var screenW: CGFloat = 0
 
     var body: some Scene {
         let preview = ContentView(
@@ -41,7 +48,10 @@ struct AppIconGeneratorApp: App {
             constrained: $constrained,
             backgroundColour: $backgroundColour,
             shapeFillType: $shapeFillType,
-            sfsAppIcon: $sfsAppIcon
+            sfsAppIcon: $sfsAppIcon,
+            imageType: $imageType,
+            screenH: $screenH,
+            screenW: $screenW
         )
 
         let interface = Interface(
@@ -55,7 +65,8 @@ struct AppIconGeneratorApp: App {
             backgroundColour: $backgroundColour,
             shapeFillType: $shapeFillType,
             uiVisible: $uiVisible,
-            sfsAppIcon: $sfsAppIcon
+            sfsAppIcon: $sfsAppIcon,
+            imageType: $imageType
         )
         
         WindowGroup {
@@ -67,15 +78,18 @@ struct AppIconGeneratorApp: App {
 //                        .background(.clear)
 //                    interface
 //                }
-                ZStack(alignment: .top) {
-                    ScrollView {
+                ZStack(alignment: .topLeading) {
+                    if imageType == .icon {
+                        ScrollView {
+                            preview
+                        }
+                    } else if imageType == .wallpaper { // TODO: may render in a scrollview if its better UX
                         preview
-                            .frame(width: 1100, height: 1100)
-                            .background(.clear)
                     }
 
                     if uiVisible {
                         interface
+                            .frame(maxWidth: 700)
                     } else {
                         VStack {
                             HStack(spacing: 1) {
@@ -134,44 +148,28 @@ struct AppIconGeneratorApp: App {
                     }
                 }
             }
+            .onAppear(perform: determineScreenSize)
         }
         .commands {
             CommandGroup(after: .newItem) {
                 Button("Save") {
-                    let screenshot = preview.snapshot()
-                    let timestamp = Date.now.timeIntervalSince1970
-                    let exportFolder = "/Genevive/export-\(timestamp)/"
-                    let picturesDir = FileManager.default.urls(for: .picturesDirectory, in: .userDomainMask).first!
-                    let imageURL = picturesDir
-                        .appending(component: exportFolder)
-
-                    do {
-                        try FileManager.default.createDirectory(atPath: picturesDir.path + "/Genevive", withIntermediateDirectories: false)
-                    } catch {
-                        print("Unable to create app export folder")
+                    if imageType == .icon {
+                        saveCurrentStateAsIcon(of: preview)
+                    } else if imageType == .wallpaper {
+                        saveCurrentStateAsWallpaper(of: preview)
+                    } else {
+                        fatalError("What have you done?")
                     }
-
-                    do {
-                        try FileManager.default.createDirectory(atPath: picturesDir.path + exportFolder, withIntermediateDirectories: false)
-                    } catch {
-                        print("Unable to create export folder within app folder")
-                    }
-
-                    saveAtSize(screenshot: screenshot!, h: 1024, w: 1024, path: imageURL)
-                    saveAtSize(screenshot: screenshot!, h: 512, w: 512, path: imageURL)
-                    saveAtSize(screenshot: screenshot!, h: 256, w: 256, path: imageURL)
-                    saveAtSize(screenshot: screenshot!, h: 128, w: 128, path: imageURL)
-                    saveAtSize(screenshot: screenshot!, h: 64, w: 64, path: imageURL)
-                    saveAtSize(screenshot: screenshot!, h: 32, w: 32, path: imageURL)
-                    saveAtSize(screenshot: screenshot!, h: 16, w: 16, path: imageURL)
                 }
                 .keyboardShortcut("s", modifiers: .command)
             }
         }
+
     }
 
+    // TODO: move all these functions to a class
     private func saveAtSize(screenshot: NSImage, h: Int, w: Int, path: URL) -> Void {
-        let image = screenshot.resize(w: w, h: h)
+        let image = screenshot//.resize(w: w, h: h)
         let fileName = "\(h)x\(w).png"
 
         if let png = image.png {
@@ -183,6 +181,60 @@ struct AppIconGeneratorApp: App {
             }
         } else {
             print("No PNG data?")
+        }
+    }
+
+    private func saveCurrentStateAsIcon(of: any View) -> Void {
+        let (data, url) = saveCurrentState(of: of)
+
+        saveAtSize(screenshot: data!, h: 1024, w: 1024, path: url!)
+        saveAtSize(screenshot: data!, h: 512, w: 512, path: url!)
+        saveAtSize(screenshot: data!, h: 256, w: 256, path: url!)
+        saveAtSize(screenshot: data!, h: 128, w: 128, path: url!)
+        saveAtSize(screenshot: data!, h: 64, w: 64, path: url!)
+        saveAtSize(screenshot: data!, h: 32, w: 32, path: url!)
+        saveAtSize(screenshot: data!, h: 16, w: 16, path: url!)
+    }
+
+    private func saveCurrentStateAsWallpaper(of: any View) -> Void {
+        let (data, url) = saveCurrentState(of: of)
+
+        saveAtSize(screenshot: data!, h: Int(screenH), w: Int(screenW), path: url!)
+    }
+
+    private func saveCurrentState(of: any View) -> (NSImage?, URL?) {
+        let screenshot = of.snapshot()
+        let generatorCode = Int.random(in: 99999...9999999)
+        let exportFolder = "/Genevive/export-\(imageType)-\(generatorCode)/"
+        let picturesDir = FileManager.default.urls(for: .picturesDirectory, in: .userDomainMask).first!
+        let imageURL = picturesDir
+            .appending(component: exportFolder)
+
+        do {
+            try FileManager.default.createDirectory(atPath: picturesDir.path + "/Genevive", withIntermediateDirectories: false)
+        } catch {
+            // it already exists, do nothing
+        }
+
+        do {
+            try FileManager.default.createDirectory(atPath: picturesDir.path + exportFolder, withIntermediateDirectories: false)
+        } catch {
+            print("Unable to create export folder within app folder")
+        }
+
+        if screenshot != nil {
+            return (screenshot, imageURL)
+        }
+
+        return (nil, nil)
+    }
+
+    private func determineScreenSize() -> Void {
+        if let screen = NSScreen.main {
+            screenH = screen.frame.size.height
+            screenW = screen.frame.size.width
+        } else {
+            print("Unable to determine screen size")
         }
     }
 }

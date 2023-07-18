@@ -19,6 +19,7 @@ struct Interface: View {
     @Binding public var shapeFillType: Int
     @Binding public var uiVisible: Bool
     @Binding public var sfsAppIcon: String
+    @Binding public var imageType: GeneratedImageType
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -61,12 +62,14 @@ struct Interface: View {
                         Text("\(Int(numberOfLayers))")
                     }
 
-                    VStack {
-                        Slider(value: $maskCornerRoundness, in: 0...300) {
-                            Text("Bevel")
-                        }
+                    if imageType == .icon {
+                        VStack {
+                            Slider(value: $maskCornerRoundness, in: 0...300) {
+                                Text("Bevel")
+                            }
 
-                        Text("\(Int(maskCornerRoundness))")
+                            Text("\(Int(maskCornerRoundness))")
+                        }
                     }
                 }
             }
@@ -112,19 +115,28 @@ struct Interface: View {
                         }
                     }
                     // TODO: add this back, make it work to generate large scale art
-//                    Toggle("Size constraints?", isOn: $constrained)
+                    Toggle("Size constraints?", isOn: $constrained)
+                        .onChange(of: constrained) { _ in
+                            if constrained {
+                                imageType = .icon
+                            } else {
+                                imageType = .wallpaper
+                            }
+                        }
                 }
             }
 
-            VStack(alignment: .leading) {
-                Divider()
+            if imageType == .icon {
+                VStack(alignment: .leading) {
+                    Divider()
 
-                Text("Icon")
-                    .font(.title3)
-                Text("Choose an icon from the SF Symbols app/library")
+                    Text("Icon")
+                        .font(.title3)
+                    Text("Choose an icon from the SF Symbols app/library")
 
-                HStack {
-                    TextField("SF Symbols icon", text: $sfsAppIcon)
+                    HStack {
+                        TextField("SF Symbols icon", text: $sfsAppIcon)
+                    }
                 }
             }
         }
