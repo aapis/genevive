@@ -101,7 +101,6 @@ struct Interface: View {
                             Text("Random gradient").tag(3)
                         }
 
-                        // TODO: add this back, make it work to generate large scale art
                         Toggle("Size constraints?", isOn: $constrained)
                             .onChange(of: constrained) { _ in
                                 if constrained {
@@ -127,7 +126,7 @@ struct Interface: View {
                                         colours.append(Color.random())
                                     }
                                 } else {
-                                    let _ = colours.popLast() // removes last item from the list
+                                    let _ = colours.popLast()
                                 }
                             }
                         }
