@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @Binding public var colours: [Color]
+    @Binding public var planes: Int
     @Binding public var gradientLayers: [any IconLayer]
     @Binding public var startPoint: UnitPoint
     @Binding public var endPoint: UnitPoint
@@ -25,7 +26,11 @@ struct ContentView: View {
     var body: some View {
         VStack {
             let content = ZStack {
-                BackgroundColour(use: $backgroundColour, set: $colours).render()
+                if backgroundColour == 3 {
+                    LinearGradient(gradient: Gradient(colors: colours), startPoint: .top, endPoint: .bottom)
+                } else {
+                    BackgroundColour(use: $backgroundColour, set: $colours).render()
+                }
 
                 ForEach(gradientLayers, id: \(any IconLayer).id) { layer in
                     if layer.visible {
@@ -90,9 +95,11 @@ struct ContentView: View {
     }
 
     private func modifyLayers() -> Void {
-
         for i in 0...Int(numberOfLayers) {
             gradientLayers[i].randomize()
         }
+
+        // For some reason this is required to trigger a view refresh. Above loop should too?
+        numberOfLayers += 1
     }
 }

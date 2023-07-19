@@ -20,10 +20,10 @@ public enum GeneratedImageType {
 struct AppIconGeneratorApp: App {
     @State public var colours: [Color] = [
         Color.random(),
-        Color.random(),
         Color.random()
     ]
-    @State public var numberOfLayers: Float = 1.0
+    @State public var numberOfGradientPlanes: Int = 3
+    @State public var numberOfLayers: Float = 5.0
     @State public var startPoint: UnitPoint = .top
     @State public var endPoint: UnitPoint = .bottom
     @State public var layers: [any IconLayer] = []
@@ -40,6 +40,7 @@ struct AppIconGeneratorApp: App {
     var body: some Scene {
         let preview = ContentView(
             colours: $colours,
+            planes: $numberOfGradientPlanes,
             gradientLayers: $layers,
             startPoint: $startPoint,
             endPoint: $endPoint,
@@ -56,6 +57,7 @@ struct AppIconGeneratorApp: App {
 
         let interface = Interface(
             colours: $colours,
+            planes: $numberOfGradientPlanes,
             layers: $layers,
             startPoint: $startPoint,
             endPoint: $endPoint,
@@ -89,7 +91,7 @@ struct AppIconGeneratorApp: App {
 
                     if uiVisible {
                         interface
-                            .frame(maxWidth: 700, maxHeight: 400)
+                            .frame(maxWidth: 700, maxHeight: constrained ? 500 : 400)
                     } else {
                         minimizedInterface
                     }
@@ -151,7 +153,7 @@ struct AppIconGeneratorApp: App {
                     }
                 } label: {
                     ZStack {
-                        Color.accentColor
+                        Color.blue
                             .shadow(color: .black.opacity(0.3), radius: 0, x: 10, y: 10)
                         Image(systemName: "arrow.clockwise.circle.fill")
                             .font(.largeTitle)
@@ -175,7 +177,7 @@ struct AppIconGeneratorApp: App {
 
     // TODO: move all these functions to a class
     private func saveAtSize(screenshot: NSImage, h: Int, w: Int, path: URL) -> Void {
-        let image = screenshot//.resize(w: w, h: h)
+        let image = screenshot.resize(w: w, h: h)
         let fileName = "\(h)x\(w).png"
 
         if let png = image.png {

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct Interface: View {
     @Binding public var colours: [Color]
+    @Binding public var planes: Int
     @Binding public var layers: [any IconLayer]
     @Binding public var startPoint: UnitPoint
     @Binding public var endPoint: UnitPoint
@@ -95,29 +96,9 @@ struct Interface: View {
                             Text("From random set").tag(0)
                             Text("White").tag(1)
                             Text("Black").tag(2)
+                            Text("Random gradient").tag(3)
                         }
 
-                        Button {
-                            withAnimation {
-                                colours = [
-                                    Color.random(),
-                                    Color.random(),
-                                    Color.random()
-                                ]
-                            }
-                        } label: {
-                            Image(systemName: "arrow.clockwise.circle.fill")
-                                .font(.title)
-                                .help("Randomize colours")
-                        }
-                        .buttonStyle(.plain)
-                        .onHover { inside in
-                            if inside {
-                                NSCursor.pointingHand.push()
-                            } else {
-                                NSCursor.pop()
-                            }
-                        }
                         // TODO: add this back, make it work to generate large scale art
                         Toggle("Size constraints?", isOn: $constrained)
                             .onChange(of: constrained) { _ in
@@ -128,18 +109,140 @@ struct Interface: View {
                                 }
                             }
                     }
-                }
 
-                if imageType == .icon {
-                    VStack(alignment: .leading) {
+                    if shapeFillType == 0 {
                         Divider()
-
-                        Text("Icon")
-                            .font(.title3)
-                        Text("Choose an icon from the SF Symbols app/library")
-
                         HStack {
-                            TextField("SF Symbols icon", text: $sfsAppIcon)
+                            Picker("Gradient planes", selection: $planes) {
+                                Text("2").tag(2)
+                                Text("3").tag(3)
+                            }
+                            .onChange(of: planes) { numPlanes in
+                                if colours.count == 2 {
+                                    if numPlanes == 3 {
+                                        colours.append(Color.random())
+                                    }
+                                } else {
+                                    let _ = colours.popLast() // removes last item from the list
+                                }
+                            }
+                        }
+                    }
+
+                    if imageType == .icon {
+                        VStack(alignment: .leading) {
+                            Divider()
+
+                            Text("Icon")
+                                .font(.title3)
+                            Text("Choose an icon from the SF Symbols app/library")
+
+                            HStack {
+                                TextField("SF Symbols icon", text: $sfsAppIcon)
+                            }
+                        }
+                    }
+
+                    // button group, last section in list
+                    Divider()
+                    HStack {
+                        Button {
+                            withAnimation {
+                                colours = [
+                                    Color.random(),
+                                    Color.random(),
+                                    Color.random()
+                                ]
+                            }
+                        } label: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 5)
+                                    .foregroundColor(.blue)
+
+                                HStack {
+                                    Image(systemName: "arrow.clockwise.circle.fill")
+                                        .font(.title)
+                                        .help("Randomize colours")
+                                        .symbolRenderingMode(.hierarchical)
+                                    Text("Randomize")
+                                }
+                                .padding()
+                            }
+                        }
+                        .buttonStyle(.plain)
+                        .onHover { inside in
+                            if inside {
+                                NSCursor.pointingHand.push()
+                            } else {
+                                NSCursor.pop()
+                            }
+                        }
+
+                        Button {
+                            print("Saving")
+                        } label: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 5)
+                                    .opacity(0.3)
+
+                                HStack {
+                                    Image(systemName: "arrow.down.to.line.circle")
+                                        .font(.title)
+                                        .help("Save to ~/Pictures/Genevive")
+                                        .symbolRenderingMode(.hierarchical)
+                                    Text("Save")
+
+                                }
+                                .padding()
+                            }
+                        }
+                        .buttonStyle(.plain)
+                        .onHover { inside in
+                            if inside {
+                                NSCursor.pointingHand.push()
+                            } else {
+                                NSCursor.pop()
+                            }
+                        }
+
+                        if imageType == .wallpaper {
+                            Button {
+                                let workspace = NSWorkspace.shared
+
+                                do {
+                                    // TODO: get a real snapshot and URL, need to migrate all the save code to a class
+                                    // TODO: so the current view can be saved and set as wallpaper all at once
+                                    let url = URL(string: "/Pictures/Genevive/export-wallpaper-4268779/1200x3840.png")
+
+                                    if let screen = NSScreen.main {
+                                        try workspace.setDesktopImageURL(url!, for: screen)
+                                    }
+                                } catch {
+                                    print("Unable to set desktop background")
+                                }
+                            } label: {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 5)
+                                        .opacity(0.3)
+
+                                    HStack {
+                                        Image(systemName: "desktopcomputer.and.arrow.down")
+                                            .font(.title)
+                                            .help("Set as desktop wallpaper")
+                                            .symbolRenderingMode(.hierarchical)
+                                        Text("Set as wallpaper")
+                                    }
+                                    .padding()
+                                }
+                            }
+                            .buttonStyle(.plain)
+                            .onHover { inside in
+                                if inside {
+                                    NSCursor.pointingHand.push()
+                                } else {
+                                    NSCursor.pop()
+                                }
+                            }
                         }
                     }
                 }
