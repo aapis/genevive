@@ -22,6 +22,7 @@ struct ContentView: View {
     @Binding public var imageType: GeneratedImageType
     @Binding public var screenH: CGFloat
     @Binding public var screenW: CGFloat
+    @Binding public var invertIconColour: Bool
 
     var body: some View {
         VStack {
@@ -49,7 +50,7 @@ struct ContentView: View {
                         Image(systemName: sfsAppIcon)
                             .font(.system(size: 700))
                             .opacity(0.8)
-                            .foregroundColor(colours.first!.isBright() ? Color.black : Color.white)
+                            .foregroundColor(iconFgColour())
                             .symbolRenderingMode(.hierarchical)
                     }
                 }
@@ -101,5 +102,19 @@ struct ContentView: View {
 
         // For some reason this is required to trigger a view refresh. Above loop should too?
         numberOfLayers += 1
+    }
+
+    private func iconFgColour() -> Color {
+        let colour = colours.first!.isBright() ? Color.black : Color.white
+
+        if invertIconColour {
+            if colour == .black {
+                return Color.white
+            } else {
+                return Color.black
+            }
+        }
+
+        return colour
     }
 }

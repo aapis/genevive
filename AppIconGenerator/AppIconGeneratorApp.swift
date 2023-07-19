@@ -36,6 +36,7 @@ struct AppIconGeneratorApp: App {
     @State public var imageType: GeneratedImageType = .icon
     @State private var screenH: CGFloat = 0
     @State private var screenW: CGFloat = 0
+    @State private var invertIconColour: Bool = false
 
     @StateObject public var storage: Storage = Storage()
 
@@ -54,7 +55,8 @@ struct AppIconGeneratorApp: App {
             sfsAppIcon: $sfsAppIcon,
             imageType: $imageType,
             screenH: $screenH,
-            screenW: $screenW
+            screenW: $screenW,
+            invertIconColour: $invertIconColour
         )
 
         let interface = Interface(
@@ -70,7 +72,8 @@ struct AppIconGeneratorApp: App {
             shapeFillType: $shapeFillType,
             uiVisible: $uiVisible,
             sfsAppIcon: $sfsAppIcon,
-            imageType: $imageType
+            imageType: $imageType,
+            invertIconColour: $invertIconColour
         )
             .environmentObject(storage)
 

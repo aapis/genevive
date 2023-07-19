@@ -109,26 +109,28 @@ struct MinimizedInterface: View {
         }
     }
 
-    private var setAsWallpaper: some View {
-        Button {
-            storage.setAsWallpaper()
-        } label: {
-            ZStack {
-                Color.indigo
-                    .shadow(color: .black.opacity(0.3), radius: 0, x: 10, y: 10)
-                Image(systemName: "desktopcomputer.and.arrow.down")
-                    .font(.largeTitle)
-                    .symbolRenderingMode(.hierarchical)
+    @ViewBuilder private var setAsWallpaper: some View {
+        if storage.type == .wallpaper {
+            Button {
+                storage.setAsWallpaper()
+            } label: {
+                ZStack {
+                    Color.indigo
+                        .shadow(color: .black.opacity(0.3), radius: 0, x: 10, y: 10)
+                    Image(systemName: "desktopcomputer.and.arrow.down")
+                        .font(.largeTitle)
+                        .symbolRenderingMode(.hierarchical)
+                }
+                .frame(width: 50, height: 50)
+                .help("Set as desktop wallpaper")
             }
-            .frame(width: 50, height: 50)
-            .help("Set as desktop wallpaper")
-        }
-        .buttonStyle(.plain)
-        .onHover { inside in
-            if inside {
-                NSCursor.pointingHand.push()
-            } else {
-                NSCursor.pop()
+            .buttonStyle(.plain)
+            .onHover { inside in
+                if inside {
+                    NSCursor.pointingHand.push()
+                } else {
+                    NSCursor.pop()
+                }
             }
         }
     }

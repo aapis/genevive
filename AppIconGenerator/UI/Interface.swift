@@ -21,6 +21,7 @@ struct Interface: View {
     @Binding public var uiVisible: Bool
     @Binding public var sfsAppIcon: String
     @Binding public var imageType: GeneratedImageType
+    @Binding public var invertIconColour: Bool
 
     @EnvironmentObject private var storage: Storage
 
@@ -142,6 +143,7 @@ struct Interface: View {
 
                             HStack {
                                 TextField("SF Symbols icon", text: $sfsAppIcon)
+                                Toggle("Invert colour", isOn: $invertIconColour)
                             }
                         }
                     }
