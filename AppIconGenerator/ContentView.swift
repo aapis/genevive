@@ -105,6 +105,7 @@ struct ContentView: View {
     }
 
     private func iconFgColour() -> Color {
+        // TODO: offer the same settings as backgroundColour
         let colour = colours.first!.isBright() ? Color.black : Color.white
 
         if invertIconColour {
