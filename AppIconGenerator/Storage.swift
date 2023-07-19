@@ -92,24 +92,33 @@ public class Storage: ObservableObject {
 
     private func saveCurrentState(of: any View) -> NSImage? {
         let screenshot = of.snapshot()
-        let generatorCode = Int.random(in: 99999...9999999)
-        let exportFolder = "/Genevive/export-\(type)-\(generatorCode)/"
-        let picturesDir = FileManager.default.urls(for: .picturesDirectory, in: .userDomainMask).first!
-        path = picturesDir
-            .appending(component: exportFolder)
+        let (root, file) = determineStoragePaths()
 
         do {
-            try FileManager.default.createDirectory(atPath: picturesDir.path + "/Genevive", withIntermediateDirectories: false)
+            try FileManager.default.createDirectory(atPath: root, withIntermediateDirectories: false)
         } catch {
             // it already exists, do nothing
         }
 
         do {
-            try FileManager.default.createDirectory(atPath: picturesDir.path + exportFolder, withIntermediateDirectories: false)
+            try FileManager.default.createDirectory(atPath: file, withIntermediateDirectories: false)
         } catch {
             print("Unable to create export folder within app folder")
         }
 
         return screenshot
+    }
+
+    private func determineStoragePaths() -> (String, String) {
+        let generatorCode = Int.random(in: 99999...9999999)
+        let exportFolder = "/Genevive/export-\(type)-\(generatorCode)/"
+        let picturesDir = FileManager.default.urls(for: .picturesDirectory, in: .userDomainMask).first!
+        let rootPath = picturesDir.path + "/Genevive"
+        let filePath = picturesDir.path + exportFolder
+
+        path = picturesDir
+            .appending(component: exportFolder)
+
+        return (rootPath, filePath)
     }
 }
