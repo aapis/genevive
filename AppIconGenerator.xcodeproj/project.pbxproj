@@ -12,6 +12,8 @@
 		5318B99D2A65EF1B00FBCE39 /* NSImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5318B9982A65EF1B00FBCE39 /* NSImage.swift */; };
 		5318B99E2A65EF1B00FBCE39 /* NSBitmapImageRep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5318B9992A65EF1B00FBCE39 /* NSBitmapImageRep.swift */; };
 		5318B99F2A65EF1B00FBCE39 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5318B99A2A65EF1B00FBCE39 /* Color.swift */; };
+		53D71F682A679CC0000D6284 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D71F672A679CC0000D6284 /* Storage.swift */; };
+		53D71F6A2A67AA68000D6284 /* MinimizedInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D71F692A67AA68000D6284 /* MinimizedInterface.swift */; };
 		53F517B22A65C14100E83D0F /* LayerNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F517B12A65C14100E83D0F /* LayerNavigator.swift */; };
 		53F517B52A65C24600E83D0F /* IconLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F517B42A65C24600E83D0F /* IconLayer.swift */; };
 		53F517B82A65C27100E83D0F /* GradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F517B72A65C27100E83D0F /* GradientLayer.swift */; };
@@ -50,6 +52,8 @@
 		5318B9982A65EF1B00FBCE39 /* NSImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSImage.swift; sourceTree = "<group>"; };
 		5318B9992A65EF1B00FBCE39 /* NSBitmapImageRep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSBitmapImageRep.swift; sourceTree = "<group>"; };
 		5318B99A2A65EF1B00FBCE39 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		53D71F672A679CC0000D6284 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
+		53D71F692A67AA68000D6284 /* MinimizedInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinimizedInterface.swift; sourceTree = "<group>"; };
 		53F517B12A65C14100E83D0F /* LayerNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerNavigator.swift; sourceTree = "<group>"; };
 		53F517B42A65C24600E83D0F /* IconLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconLayer.swift; sourceTree = "<group>"; };
 		53F517B72A65C27100E83D0F /* GradientLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientLayer.swift; sourceTree = "<group>"; };
@@ -119,6 +123,7 @@
 			children = (
 				53F517B62A65C26000E83D0F /* LayerTypes */,
 				53FBCCCE2A64709D00B88539 /* Interface.swift */,
+				53D71F692A67AA68000D6284 /* MinimizedInterface.swift */,
 				53F517B42A65C24600E83D0F /* IconLayer.swift */,
 				53F517BB2A65C2C600E83D0F /* BackgroundColour.swift */,
 			);
@@ -162,6 +167,7 @@
 				53F517B02A65C12700E83D0F /* Navigators */,
 				53FBCCA32A6376E700B88539 /* AppIconGeneratorApp.swift */,
 				53FBCCA52A6376E700B88539 /* ContentView.swift */,
+				53D71F672A679CC0000D6284 /* Storage.swift */,
 				53FBCCA72A6376E800B88539 /* Assets.xcassets */,
 				53FBCCAC2A6376E800B88539 /* AppIconGenerator.entitlements */,
 				53FBCCA92A6376E800B88539 /* Preview Content */,
@@ -325,6 +331,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5318B99B2A65EF1B00FBCE39 /* View.swift in Sources */,
+				53D71F682A679CC0000D6284 /* Storage.swift in Sources */,
 				5318B99C2A65EF1B00FBCE39 /* Data.swift in Sources */,
 				5318B99D2A65EF1B00FBCE39 /* NSImage.swift in Sources */,
 				5318B99E2A65EF1B00FBCE39 /* NSBitmapImageRep.swift in Sources */,
@@ -332,6 +339,7 @@
 				53F517B52A65C24600E83D0F /* IconLayer.swift in Sources */,
 				53FBCCA62A6376E700B88539 /* ContentView.swift in Sources */,
 				53FBCCA42A6376E700B88539 /* AppIconGeneratorApp.swift in Sources */,
+				53D71F6A2A67AA68000D6284 /* MinimizedInterface.swift in Sources */,
 				53FBCCCF2A64709D00B88539 /* Interface.swift in Sources */,
 				53F517BA2A65C28700E83D0F /* SolidLayer.swift in Sources */,
 				53F517BC2A65C2C600E83D0F /* BackgroundColour.swift in Sources */,

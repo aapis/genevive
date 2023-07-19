@@ -22,6 +22,8 @@ struct Interface: View {
     @Binding public var sfsAppIcon: String
     @Binding public var imageType: GeneratedImageType
 
+    @EnvironmentObject private var storage: Storage
+
     var body: some View {
         ZStack(alignment: .topLeading) {
             Color.accentColor
@@ -107,6 +109,8 @@ struct Interface: View {
                                 } else {
                                     imageType = .wallpaper
                                 }
+
+                                storage.setType(imageType)
                             }
                     }
 
@@ -179,11 +183,11 @@ struct Interface: View {
                         }
 
                         Button {
-                            print("Saving")
+                            storage.saveScreenshot()
                         } label: {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 5)
-                                    .opacity(0.3)
+                                    .foregroundColor(.orange)
 
                                 HStack {
                                     Image(systemName: "arrow.down.to.line.circle")
@@ -191,7 +195,6 @@ struct Interface: View {
                                         .help("Save to ~/Pictures/Genevive")
                                         .symbolRenderingMode(.hierarchical)
                                     Text("Save")
-
                                 }
                                 .padding()
                             }
@@ -207,30 +210,18 @@ struct Interface: View {
 
                         if imageType == .wallpaper {
                             Button {
-                                let workspace = NSWorkspace.shared
-
-                                do {
-                                    // TODO: get a real snapshot and URL, need to migrate all the save code to a class
-                                    // TODO: so the current view can be saved and set as wallpaper all at once
-                                    let url = URL(string: "/Pictures/Genevive/export-wallpaper-4268779/1200x3840.png")
-
-                                    if let screen = NSScreen.main {
-                                        try workspace.setDesktopImageURL(url!, for: screen)
-                                    }
-                                } catch {
-                                    print("Unable to set desktop background")
-                                }
+                                storage.setAsWallpaper()
                             } label: {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 5)
-                                        .opacity(0.3)
+                                        .foregroundColor(.indigo)
 
                                     HStack {
                                         Image(systemName: "desktopcomputer.and.arrow.down")
                                             .font(.title)
                                             .help("Set as desktop wallpaper")
                                             .symbolRenderingMode(.hierarchical)
-                                        Text("Set as wallpaper")
+                                        Text("Set Desktop Picture")
                                     }
                                     .padding()
                                 }
