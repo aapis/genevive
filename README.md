@@ -11,6 +11,12 @@ Create random app icons by dragging sliders, then save them at the following res
 * 512x512
 * 1024x1024
 
+### Wallpaper generator
+
+Genevive can generate wallpapers at whatever resolution your OS is currently using using the same controls you use to create icons.
+
+### Legal disclosure
+
 If you *generate an image* with this software I do not claim ownership of it now nor at any point in the future. That is your icon, do whatever you want with it. The code is covered by it's own license.
 
 In the initial release you'll have to hit `cmd-s` to save an icon, but future versions will allow you to do this through the UI.

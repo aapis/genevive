@@ -12,14 +12,18 @@ public enum ShapeFillType {
     case gradient, solid
 }
 
+public enum GeneratedImageType {
+    case icon, wallpaper
+}
+
 @main
 struct AppIconGeneratorApp: App {
     @State public var colours: [Color] = [
         Color.random(),
-        Color.random(),
         Color.random()
     ]
-    @State public var numberOfLayers: Float = 1.0
+    @State public var numberOfGradientPlanes: Int = 3
+    @State public var numberOfLayers: Float = 5.0
     @State public var startPoint: UnitPoint = .top
     @State public var endPoint: UnitPoint = .bottom
     @State public var layers: [any IconLayer] = []
@@ -29,10 +33,17 @@ struct AppIconGeneratorApp: App {
     @State public var shapeFillType: Int = 0
     @State public var uiVisible: Bool = true
     @State public var sfsAppIcon: String = ""
+    @State public var imageType: GeneratedImageType = .icon
+    @State private var screenH: CGFloat = 0
+    @State private var screenW: CGFloat = 0
+    @State private var invertIconColour: Bool = false
+
+    @StateObject public var storage: Storage = Storage()
 
     var body: some Scene {
         let preview = ContentView(
             colours: $colours,
+            planes: $numberOfGradientPlanes,
             gradientLayers: $layers,
             startPoint: $startPoint,
             endPoint: $endPoint,
@@ -41,11 +52,16 @@ struct AppIconGeneratorApp: App {
             constrained: $constrained,
             backgroundColour: $backgroundColour,
             shapeFillType: $shapeFillType,
-            sfsAppIcon: $sfsAppIcon
+            sfsAppIcon: $sfsAppIcon,
+            imageType: $imageType,
+            screenH: $screenH,
+            screenW: $screenW,
+            invertIconColour: $invertIconColour
         )
 
         let interface = Interface(
             colours: $colours,
+            planes: $numberOfGradientPlanes,
             layers: $layers,
             startPoint: $startPoint,
             endPoint: $endPoint,
@@ -55,134 +71,76 @@ struct AppIconGeneratorApp: App {
             backgroundColour: $backgroundColour,
             shapeFillType: $shapeFillType,
             uiVisible: $uiVisible,
-            sfsAppIcon: $sfsAppIcon
+            sfsAppIcon: $sfsAppIcon,
+            imageType: $imageType,
+            invertIconColour: $invertIconColour
         )
+            .environmentObject(storage)
+
+        let minimizedInterface = MinimizedInterface(
+            colours: $colours,
+            uiVisible: $uiVisible
+        )
+            .environmentObject(storage)
         
         WindowGroup {
             VStack(alignment: .leading) {
-//                HStack(alignment: .top) {
-//                    preview
-//                        .frame(width: 100, height: 100)
-//                        .scaledToFill()
-//                        .background(.clear)
-//                    interface
-//                }
-                ZStack(alignment: .top) {
-                    ScrollView {
+                ZStack(alignment: .topLeading) {
+                    if imageType == .icon {
+                        ScrollView {
+                            preview
+                        }
+                    } else if imageType == .wallpaper {
                         preview
-                            .frame(width: 1100, height: 1100)
-                            .background(.clear)
                     }
 
                     if uiVisible {
                         interface
+                            .frame(maxWidth: 700, maxHeight: constrained ? 500 : 400)
                     } else {
-                        VStack {
-                            HStack(spacing: 1) {
-                                Spacer()
-                                Button {
-                                    withAnimation {
-                                        uiVisible.toggle()
-                                    }
-                                } label: {
-                                    ZStack {
-                                        Color.accentColor
-                                        Image(systemName: "arrow.down.backward.square")
-                                            .font(.largeTitle)
-                                            .symbolRenderingMode(.hierarchical)
-                                    }
-                                    .frame(width: 50, height: 50)
-                                }
-                                .buttonStyle(.plain)
-                                .onHover { inside in
-                                    if inside {
-                                        NSCursor.pointingHand.push()
-                                    } else {
-                                        NSCursor.pop()
-                                    }
-                                }
-
-                                Button {
-                                    withAnimation {
-                                        colours = [
-                                            Color.random(),
-                                            Color.random(),
-                                            Color.random()
-                                        ]
-                                    }
-                                } label: {
-                                    ZStack {
-                                        Color.accentColor
-                                        Image(systemName: "arrow.clockwise.circle.fill")
-                                            .font(.largeTitle)
-                                            .symbolRenderingMode(.hierarchical)
-                                    }
-                                    .frame(width: 50, height: 50)
-                                }
-                                .buttonStyle(.plain)
-                                .onHover { inside in
-                                    if inside {
-                                        NSCursor.pointingHand.push()
-                                    } else {
-                                        NSCursor.pop()
-                                    }
-                                }
-                            }
-
-//                            LayerNavigator(layers: $layers)
-                        }
+                        minimizedInterface
                     }
                 }
             }
+            .onAppear(perform: {
+                storage.setType(imageType)
+                storage.setView(preview)
+
+                // TODO: see if we can pass Storage to the structs that need these values
+                screenH = storage.screenHeight
+                screenW = storage.screenWidth
+                
+            })
         }
         .commands {
             CommandGroup(after: .newItem) {
                 Button("Save") {
-                    let screenshot = preview.snapshot()
-                    let timestamp = Date.now.timeIntervalSince1970
-                    let exportFolder = "/Genevive/export-\(timestamp)/"
-                    let picturesDir = FileManager.default.urls(for: .picturesDirectory, in: .userDomainMask).first!
-                    let imageURL = picturesDir
-                        .appending(component: exportFolder)
-
-                    do {
-                        try FileManager.default.createDirectory(atPath: picturesDir.path + "/Genevive", withIntermediateDirectories: false)
-                    } catch {
-                        print("Unable to create app export folder")
-                    }
-
-                    do {
-                        try FileManager.default.createDirectory(atPath: picturesDir.path + exportFolder, withIntermediateDirectories: false)
-                    } catch {
-                        print("Unable to create export folder within app folder")
-                    }
-
-                    saveAtSize(screenshot: screenshot!, h: 1024, w: 1024, path: imageURL)
-                    saveAtSize(screenshot: screenshot!, h: 512, w: 512, path: imageURL)
-                    saveAtSize(screenshot: screenshot!, h: 256, w: 256, path: imageURL)
-                    saveAtSize(screenshot: screenshot!, h: 128, w: 128, path: imageURL)
-                    saveAtSize(screenshot: screenshot!, h: 64, w: 64, path: imageURL)
-                    saveAtSize(screenshot: screenshot!, h: 32, w: 32, path: imageURL)
-                    saveAtSize(screenshot: screenshot!, h: 16, w: 16, path: imageURL)
+                    storage.saveScreenshot()
                 }
                 .keyboardShortcut("s", modifiers: .command)
             }
-        }
-    }
 
-    private func saveAtSize(screenshot: NSImage, h: Int, w: Int, path: URL) -> Void {
-        let image = screenshot.resize(w: w, h: h)
-        let fileName = "\(h)x\(w).png"
-
-        if let png = image.png {
-            do {
-                try png.write(to: path.appending(component: fileName))
-                print("\(fileName) saved")
-            } catch {
-                print(error)
+            CommandGroup(after: .newItem) {
+                Button("Randomize colours") {
+                    // TODO: put this callback in storage or some similar structure
+                    colours = [
+                        Color.random(),
+                        Color.random(),
+                        Color.random()
+                    ]
+                }
+                .keyboardShortcut("r", modifiers: .command)
             }
-        } else {
-            print("No PNG data?")
+
+            CommandGroup(after: .newItem) {
+                Button("Set Desktop Picture") {
+                    if imageType == .wallpaper {
+                        storage.setAsWallpaper()
+                    }
+                }
+                .keyboardShortcut("s", modifiers: [.command, .shift])
+                .disabled(imageType != .wallpaper)
+            }
         }
     }
 }
