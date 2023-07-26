@@ -22,6 +22,8 @@ struct Interface: View {
     @Binding public var sfsAppIcon: String
     @Binding public var imageType: GeneratedImageType
     @Binding public var invertIconColour: Bool
+    
+    @State private var selectedScreenDimensions: Int = 0
 
     @EnvironmentObject private var storage: Storage
 
@@ -54,6 +56,22 @@ struct Interface: View {
 
                 VStack(alignment: .leading) {
                     Divider()
+
+                    Picker("Canvas size", selection: $selectedScreenDimensions) {
+                        Text("Icon (1024x1024)").tag(0)
+                        Text("Wallpaper").tag(1)
+                    }
+                    .onChange(of: selectedScreenDimensions) { _ in
+                        constrained.toggle()
+
+                        if constrained {
+                            imageType = .icon
+                        } else {
+                            imageType = .wallpaper
+                        }
+
+                        storage.setType(imageType)
+                    }
 
                     Text("Layers")
                         .font(.title3)
@@ -101,23 +119,11 @@ struct Interface: View {
                             Text("Black").tag(2)
                             Text("Random gradient").tag(3)
                         }
-
-                        Toggle("Size constraints?", isOn: $constrained)
-                            .onChange(of: constrained) { _ in
-                                if constrained {
-                                    imageType = .icon
-                                } else {
-                                    imageType = .wallpaper
-                                }
-
-                                storage.setType(imageType)
-                            }
                     }
 
                     if shapeFillType == 0 {
-                        Divider()
                         HStack {
-                            Picker("Gradient planes", selection: $planes) {
+                            Picker("Number of gradient stops", selection: $planes) {
                                 Text("2").tag(2)
                                 Text("3").tag(3)
                             }

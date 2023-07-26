@@ -121,6 +121,18 @@ struct AppIconGeneratorApp: App {
             }
 
             CommandGroup(after: .newItem) {
+                Button("Randomize colours") {
+                    // TODO: put this callback in storage or some similar structure
+                    colours = [
+                        Color.random(),
+                        Color.random(),
+                        Color.random()
+                    ]
+                }
+                .keyboardShortcut("r", modifiers: .command)
+            }
+
+            CommandGroup(after: .newItem) {
                 Button("Set Desktop Picture") {
                     if imageType == .wallpaper {
                         storage.setAsWallpaper()
