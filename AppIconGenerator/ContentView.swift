@@ -49,7 +49,7 @@ struct ContentView: View {
                     if !sfsAppIcon.isEmpty {
                         Image(systemName: sfsAppIcon)
                             .font(.system(size: 700))
-                            .opacity(0.8)
+//                            .opacity(0.8)
                             .foregroundColor(iconFgColour())
                             .symbolRenderingMode(.hierarchical)
                     }
@@ -61,10 +61,8 @@ struct ContentView: View {
                     .mask(
                         ZStack {
                             RoundedRectangle(cornerRadius: CGFloat(maskCornerRoundness))
-                                .frame(width: 1016, height: 1016)
                         }
                     )
-                    .shadow(color: .black.opacity(0.3), radius: 8, x: 10, y: -10)
                     .frame(width: 1124, height: 1124)
                     .background(.clear)
             } else if imageType == .wallpaper {
